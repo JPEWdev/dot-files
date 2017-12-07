@@ -1,0 +1,26 @@
+[user]
+	email = JPEWhacker@gmail.com
+	name = Joshua Watt
+[push]
+	default = simple
+[color]
+	ui = auto
+[sendemail] 
+	smtpEncryption = tls 
+	smtpServer = smtp.gmail.com 
+	smtpUser = JPEWhacker@gmail.com 
+	smtpServerPort = 587
+[include]
+	path = ~/.gitconfig.local
+[diff]
+	tool = meld
+[difftool]
+	prompt = false
+[difftool "meld"]
+	cmd = meld "$LOCAL" "$REMOTE"
+[merge]
+	tool = meld
+[mergetool "meld"]
+	cmd = meld "$LOCAL" "$MERGED" "$REMOTE" --output "$MERGED"
+[core]
+	editor = gvim -f
