@@ -20,7 +20,8 @@
 	cmd = meld "$LOCAL" "$REMOTE"
 [merge]
 	tool = meld
+	conflictstyle = diff3
 [mergetool "meld"]
-	cmd = meld "$LOCAL" "$MERGED" "$REMOTE" --output "$MERGED"
+	cmd = meld "$LOCAL" "$BASE" "$REMOTE" --output "$MERGED" --diff "$BASE" "$LOCAL" --diff "$BASE" "$REMOTE" --auto-merge
 [core]
-	editor = gvim -f
+	editor = vimx
