@@ -1,0 +1,3 @@
+bind main   H :goto %(head)
+bind main   B :!git branch -a --contains=%(commit)
+
