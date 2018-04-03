@@ -5,11 +5,13 @@
 	default = simple
 [color]
 	ui = auto
-[sendemail] 
+[sendemail]
+	from = Joshua Watt <JPEWhacker@gmail.com>
 	smtpEncryption = tls 
 	smtpServer = smtp.gmail.com 
 	smtpUser = JPEWhacker@gmail.com 
 	smtpServerPort = 587
+	confirm = always
 [include]
 	path = ~/.gitconfig.local
 [diff]
@@ -25,3 +27,4 @@
 	cmd = meld "$LOCAL" "$BASE" "$REMOTE" --output "$MERGED" --diff "$BASE" "$LOCAL" --diff "$BASE" "$REMOTE" --auto-merge
 [core]
 	editor = vimx
+	hooksPath = ~/.config/git/hooks/
