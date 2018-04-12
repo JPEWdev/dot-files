@@ -1,4 +1,5 @@
-/projects/alchemy*/build/
-/projects/alchemy*/downloads/
-/projects/alchemy*/deliverables/
+*/alchemy*/.build/
+*/alchemy*/downloads/
+*/alchemy*/deliverables/
+/projects/poky*/build/
 
