@@ -2,5 +2,6 @@ bind main   H :goto %(head)
 bind main   B :!git branch -a --contains=%(commit)
 bind main   P :goto %(commit)^1
 bind main   { :goto %(commit)^2
-bind main   C ?git cherry-pick -x %(commit)
+bind main   C ?git cherry-pick %(commit)
+bind main   X ?git cherry-pick -x %(commit)
 
