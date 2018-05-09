@@ -28,3 +28,6 @@
 [core]
 	editor = vimx
 	hooksPath = ~/.config/git/hooks/
+[url "ssh://git@push.yoctoproject.org/poky-contrib"]
+    pushInsteadOf = git://git.yoctoproject.org/poky-contrib
+
