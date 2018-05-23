@@ -1,0 +1,57 @@
+#! /usr/bin/env python3
+#
+# git-pushgerrit
+#
+# Push changes to gerrit for review based on the current tracking branch
+#
+
+import subprocess
+import sys
+import argparse
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Push to gerrit')
+
+    parser.add_argument('source', nargs='?', help='Source object to push', default='HEAD')
+    parser.add_argument('--reviewer', '-r', action='append', help='Add reviewer', default=[])
+    parser.add_argument('--topic', '-t', help='Set topic')
+    parser.add_argument('--code-review', action='store_true', help='Mark as code reviewed')
+    parser.add_argument('--verified', action='store_true', help='Mark as verified')
+    parser.add_argument('--verbose', '-v', action='count', help='Increase verbosity', default=0)
+
+    args = parser.parse_args()
+
+    cmd = ['git', 'rev-parse', '--abbrev-ref', '--symbolic-full-name', '@{upstream}']
+    if args.verbose:
+        print(' '.join(cmd))
+    p = subprocess.run(cmd, stdout=subprocess.PIPE)
+    if p.returncode != 0:
+        sys.exit(p.returncode)
+
+    upstream = p.stdout.decode('ascii').splitlines()[0].strip()
+
+    if not upstream:
+        print("No upstream branch")
+        sys.exit(1)
+
+    (remote, branch) = upstream.split('/', 1)
+
+    cmd = ['git', 'push', remote, args.source + ':refs/for/' + branch]
+
+    gerrit_args = []
+    if args.reviewer:
+        gerrit_args.extend('r=' + r for r in args.reviewer)
+    if args.topic:
+        gerrit_args.append('topic=' + args.topic)
+    if args.code_review:
+        gerrit_args.append('label=Code-Review+2')
+    if args.verified:
+        gerrit_args.append('label=Verified+1')
+
+    if gerrit_args:
+        cmd[-1] += '%' + ','.join(gerrit_args)
+
+    if args.verbose:
+        print(' '.join(cmd))
+    p = subprocess.run(cmd)
+    sys.exit(p.returncode)
