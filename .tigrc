@@ -4,4 +4,5 @@ bind main   P :goto %(commit)^1
 bind main   { :goto %(commit)^2
 bind main   C ?git cherry-pick %(commit)
 bind main   X ?git cherry-pick -x %(commit)
+bind main   T !@git tag -a "%(prompt Tag name: )" -m "%(prompt Tag message: )" %(commit)
 
