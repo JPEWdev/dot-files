@@ -40,7 +40,14 @@ if __name__ == "__main__":
 
     gerrit_args = []
     if args.reviewer:
-        gerrit_args.extend('r=' + r for r in args.reviewer)
+        for r in args.reviewer:
+            user = r
+
+            p = subprocess.run(['git', 'config', '--get', 'pushgerrit.useraliases.' + r], stdout=subprocess.PIPE)
+            if p.returncode == 0:
+                user = p.stdout.decode('utf-8').splitlines()[0].strip()
+
+        gerrit_args.append('r=' + user)
     if args.topic:
         gerrit_args.append('topic=' + args.topic)
     if args.code_review:
