@@ -12,6 +12,8 @@ PATH="$PATH:~/bin"
 
 [ -d ~/.cargo/bin ] && PATH="$PATH:~/.cargo/bin"
 
+[ -e /usr/share/fzf/shell/key-bindings.bash ] && source /usr/share/fzf/shell/key-bindings.bash
+
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
 HISTCONTROL=ignoreboth
