@@ -47,7 +47,7 @@ if __name__ == "__main__":
             if p.returncode == 0:
                 user = p.stdout.decode('utf-8').splitlines()[0].strip()
 
-        gerrit_args.append('r=' + user)
+            gerrit_args.append('r=' + user)
     if args.topic:
         gerrit_args.append('topic=' + args.topic)
     if args.code_review:
