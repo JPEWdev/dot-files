@@ -18,6 +18,7 @@ if __name__ == "__main__":
     parser.add_argument('--code-review', action='store_true', help='Mark as code reviewed')
     parser.add_argument('--verified', action='store_true', help='Mark as verified')
     parser.add_argument('--verbose', '-v', action='count', help='Increase verbosity', default=0)
+    parser.add_argument('--draft', action='store_true', help='Push as draft')
 
     args = parser.parse_args()
 
@@ -36,7 +37,11 @@ if __name__ == "__main__":
 
     (remote, branch) = upstream.split('/', 1)
 
-    cmd = ['git', 'push', remote, args.source + ':refs/for/' + branch]
+    dest = 'refs/for'
+    if args.draft:
+        dest = 'refs/drafts'
+
+    cmd = ['git', 'push', remote, args.source + ':' + dest + '/' + branch]
 
     gerrit_args = []
     if args.reviewer:
