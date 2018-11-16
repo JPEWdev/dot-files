@@ -1,0 +1,8 @@
+#! /bin/sh
+
+. $(dirname "$0")/config.sh
+
+rm -f $INCOMING/*
+
+$TOOLSDIR/mail-to-mbox
+$TOOLSDIR/git-apply-incoming

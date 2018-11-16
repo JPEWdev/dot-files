@@ -1,0 +1,7 @@
+#! /bin/sh
+
+. $(dirname "$0")/config.sh
+
+if [ -e "scripts/checkpatch.pl" ]; then
+    scripts/checkpatch.pl $INCOMING/*
+fi

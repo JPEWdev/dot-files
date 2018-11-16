@@ -1,0 +1,6 @@
+#! /bin/sh
+
+. $(dirname "$0")/config.sh
+
+git am --abort
+rm -f $INCOMING/*

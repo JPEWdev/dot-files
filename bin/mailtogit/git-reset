@@ -1,0 +1,9 @@
+#! /bin/sh
+
+. $(dirname "$0")/config.sh
+
+REF=$(git rev-parse --abbrev-ref '@{upstream}')
+if [ -n "$REF" ]; then
+    git reset --hard $REF
+    rm -f $INCOMING/*
+fi

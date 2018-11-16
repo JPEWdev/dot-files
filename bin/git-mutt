@@ -1,0 +1,11 @@
+#! /bin/sh
+
+MUTT=$(which mutt)
+
+STARTFOLDER="$(git config mutt.startfolder)"
+if [ -n "$STARTFOLDER" ]; then
+    MUTT="$MUTT -f $STARTFOLDER"
+fi
+
+exec $MUTT
+

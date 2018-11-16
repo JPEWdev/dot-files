@@ -1,0 +1,6 @@
+#! /bin/sh
+
+. $(dirname "$0")/config.sh
+
+formail -cds $TOOLSDIR/procmail -
+ls -l $INCOMING

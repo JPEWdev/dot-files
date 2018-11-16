@@ -1,0 +1,5 @@
+#! /bin/sh
+
+. $(dirname "$0")/config.sh
+
+/usr/bin/procmail -m $TOOLSDIR/procmailrc -
