@@ -30,6 +30,8 @@
 	hooksPath = ~/.config/git/hooks/
 [url "ssh://git@push.yoctoproject.org/poky-contrib"]
     pushInsteadOf = git://git.yoctoproject.org/poky-contrib
+[url "ssh://git@push.yoctoproject.org/meta-mingw-contrib"]
+    pushInsteadOf = git://git.yoctoproject.org/meta-mingw-contrib
 [pretty]
     quote = %h (\"%s\")
 
