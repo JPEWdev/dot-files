@@ -32,6 +32,8 @@
     pushInsteadOf = git://git.yoctoproject.org/poky-contrib
 [url "ssh://git@push.yoctoproject.org/meta-mingw-contrib"]
     pushInsteadOf = git://git.yoctoproject.org/meta-mingw-contrib
+[url "ssh://git@push.yoctoproject.org/meta-mingw"]
+    pushInsteadOf = git://git.yoctoproject.org/meta-mingw
 [pretty]
     quote = %h (\"%s\")
 
