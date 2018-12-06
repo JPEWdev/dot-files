@@ -1,0 +1,25 @@
+#! /bin/sh
+
+TARGET="$1"
+shift
+
+show_help() {
+    echo "One of the following targets must be specified:"
+    git config --get-regexp "sendpatch.*" | sed 's/^sendpatch\.\([^\.]*\)\..*/ \1/' | sort | uniq
+}
+
+if [ -z "$TARGET" ]; then
+    show_help
+    exit 1
+fi
+
+ARGS="$(git config "sendpatch.$TARGET.args")"
+
+if [ -z "$ARGS" ]; then
+    echo "No target named '$TARGET'"
+    show_help
+    exit 1
+fi
+
+exec git send-email $ARGS "$@"
+

@@ -1,4 +1,0 @@
-#! /bin/sh
-
-exec git send-email -s --to=yocto@yoctoproject.org --subject-prefix="yocto][meta-mingw][PATCH" "$@"
-

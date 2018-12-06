@@ -1,4 +1,0 @@
-#! /bin/sh
-
-exec git send-email -s --to=openembedded-core@lists.openembedded.org --subject-prefix="OE-core][PATCH" "$@"
-

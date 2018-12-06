@@ -36,5 +36,13 @@
     pushInsteadOf = git://git.yoctoproject.org/meta-mingw
 [pretty]
     quote = %h (\"%s\")
+[sendpatch "meta-mingw"]
+    args = -s --to=yocto@yoctoproject.org --subject-prefix=yocto][meta-mingw][PATCH
+[sendpatch "oe-core"]
+    args = -s --to=openembedded-core@lists.openembedded.org --subject-prefix=OE-core][PATCH
+[sendpatch "meta-poky"]
+    args = -s --to=poky@yoctoproject.org --subject-prefix=poky][meta-poky][PATCH
+[sendpatch "bitbake"]
+    args = -s --to=bitbake-devel@lists.openembedded.org --subject-prefix=bitbake-devel][PATCH
 
 
