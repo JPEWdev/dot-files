@@ -44,5 +44,7 @@
     args = -s --to=poky@yoctoproject.org --subject-prefix=poky][meta-poky][PATCH
 [sendpatch "bitbake"]
     args = -s --to=bitbake-devel@lists.openembedded.org --subject-prefix=bitbake-devel][PATCH
+[mutt]
+    startfolder = =patches/to-apply
 
 
