@@ -1,25 +1,34 @@
-#! /bin/sh
+#! /usr/bin/env python3
 
-TARGET="$1"
-shift
+import argparse
+import sys
+import subprocess
+import shlex
+import os
 
-show_help() {
-    echo "One of the following targets must be specified:"
-    git config --get-regexp "sendpatch.*" | sed 's/^sendpatch\.\([^\.]*\)\..*/ \1/' | sort | uniq
-}
+def main():
+    targets = subprocess.check_output(['git', 'config', '--get-regexp', 'sendpatch.*']).decode('utf-8').splitlines()
 
-if [ -z "$TARGET" ]; then
-    show_help
-    exit 1
-fi
+    targets = list(set(t.split('.')[1] for t in targets if t.startswith('sendpatch.')))
+    targets.sort()
 
-ARGS="$(git config "sendpatch.$TARGET.args")"
+    parser = argparse.ArgumentParser(description="Helper for sending patches")
+    parser.add_argument('target', choices=targets)
+    parser.add_argument('--branch', action='append', default=[])
 
-if [ -z "$ARGS" ]; then
-    echo "No target named '$TARGET'"
-    show_help
-    exit 1
-fi
+    args, extra = parser.parse_known_args()
 
-exec git send-email $ARGS "$@"
+    git_args = shlex.split(subprocess.check_output(['git', 'config', 'sendpatch.%s.args' % args.target]).decode('utf-8'))
 
+    if args.branch:
+        branch_spec = '[%s]' % '/'.join(args.branch)
+    else:
+        branch_spec = ''
+
+    git_args = [a.format(branch=branch_spec) for a in git_args]
+
+    os.execvp('git', ['git', 'send-email'] + git_args + extra)
+    return 1
+
+if __name__ == "__main__":
+    sys.exit(main())

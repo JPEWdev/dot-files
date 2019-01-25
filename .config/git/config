@@ -37,13 +37,15 @@
 [pretty]
     quote = %h (\"%s\")
 [sendpatch "meta-mingw"]
-    args = -s --to=yocto@yoctoproject.org --subject-prefix=yocto][meta-mingw][PATCH
+    args = -s --to=yocto@yoctoproject.org --subject-prefix=yocto][meta-mingw]{branch}[PATCH
 [sendpatch "oe-core"]
-    args = -s --to=openembedded-core@lists.openembedded.org --subject-prefix=OE-core][PATCH
+    args = -s --to=openembedded-core@lists.openembedded.org --subject-prefix=OE-core]{branch}[PATCH
 [sendpatch "meta-poky"]
-    args = -s --to=poky@yoctoproject.org --subject-prefix=poky][meta-poky][PATCH
+    args = -s --to=poky@yoctoproject.org --subject-prefix=poky][meta-poky]{branch}[PATCH
 [sendpatch "bitbake"]
-    args = -s --to=bitbake-devel@lists.openembedded.org --subject-prefix=bitbake-devel][PATCH
+    args = -s --to=bitbake-devel@lists.openembedded.org --subject-prefix=bitbake-devel]{branch}[PATCH
+[sendpatch "garmin-morty-poky"]
+    args = --to='{{LS}}consumer-yocto@garmin.com' --smtp-auth=none --smtp-server=smtp.garmin.com --subject-prefix=yocto-2.2][poky][PATCH --cover-letter --annotate
 [mutt]
     startfolder = =patches/to-apply
 
