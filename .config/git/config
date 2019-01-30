@@ -46,6 +46,8 @@
     args = -s --to=bitbake-devel@lists.openembedded.org --subject-prefix=bitbake-devel]{branch}[PATCH
 [sendpatch "garmin-morty-poky"]
     args = --to='{{LS}}consumer-yocto@garmin.com' --smtp-auth=none --smtp-server=smtp.garmin.com --subject-prefix=yocto-2.2][poky][PATCH --cover-letter --annotate
+[sendpatch "git"]
+    args = -s --to='git@vger.kernel.org'
 [mutt]
     startfolder = =patches/to-apply
 
