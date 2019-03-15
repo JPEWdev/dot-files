@@ -18,6 +18,18 @@ def main():
 
     args, extra = parser.parse_known_args()
 
+    has_version = False
+    has_in_reply_to = False
+    for a in extra:
+        if a.startswith('--in-reply-to'):
+            has_in_reply_to = True
+        if a.startswith('-v'):
+            has_version = True
+
+    if has_version != has_in_reply_to:
+        print("--in-reply-to and -vN should both be specified if either one is")
+        return 1
+
     git_args = shlex.split(subprocess.check_output(['git', 'config', 'sendpatch.%s.args' % args.target]).decode('utf-8'))
 
     if args.branch:
