@@ -13,7 +13,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Push to gerrit')
 
     parser.add_argument('source', nargs='?', help='Source object to push', default='HEAD')
-    parser.add_argument('--reviewer', '-r', action='append', help='Add reviewer', default=[])
+    parser.add_argument('--reviewer', '-r', action='append', help='Add reviewers', default=[])
     parser.add_argument('--topic', '-t', help='Set topic')
     parser.add_argument('--code-review', action='store_true', help='Mark as code reviewed')
     parser.add_argument('--verified', action='store_true', help='Mark as verified')
@@ -45,14 +45,15 @@ if __name__ == "__main__":
 
     gerrit_args = []
     if args.reviewer:
-        for r in args.reviewer:
-            user = r
+        for rarg in args.reviewer:
+            for r in rarg.split():
+                user = r
 
-            p = subprocess.run(['git', 'config', '--get', 'pushgerrit.useraliases.' + r], stdout=subprocess.PIPE)
-            if p.returncode == 0:
-                user = p.stdout.decode('utf-8').splitlines()[0].strip()
+                p = subprocess.run(['git', 'config', '--get', 'pushgerrit.useraliases.' + r], stdout=subprocess.PIPE)
+                if p.returncode == 0:
+                    user = p.stdout.decode('utf-8').splitlines()[0].strip()
 
-            gerrit_args.append('r=' + user)
+                gerrit_args.append('r=' + user)
     if args.topic:
         gerrit_args.append('topic=' + args.topic)
     if args.code_review:
