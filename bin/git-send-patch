@@ -37,7 +37,14 @@ def main():
     else:
         branch_spec = ''
 
-    git_args = [a.format(branch=branch_spec) for a in git_args]
+    top_dir = subprocess.check_output(['git', 'rev-parse', '--show-toplevel']).decode('utf-8').strip()
+
+    expand = {
+            'branch': branch_spec,
+            'top_dir': top_dir,
+    }
+
+    git_args = [a.format(**expand) for a in git_args]
 
     os.execvp('git', ['git', 'send-email'] + git_args + extra)
     return 1
