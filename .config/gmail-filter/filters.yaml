@@ -15,6 +15,9 @@ filters:
   - query: "from:builds@travis-ci.org"
     label: "travis"
 
+  - query: "to:icecream-sundae@noreply.github.com"
+    label: "github/icecream-sundae"
+
 lists:
   - list: "avahi@lists.freedesktop.org"
     label: "avahi"
@@ -28,6 +31,9 @@ lists:
     label: "busybox"
     archive: true
     read: true
+
+  - list: "cairo@cairographics.org"
+    label: "cairo"
 
   - list: "elfutils-devel@sourceware.org"
     label: "elfutils"
