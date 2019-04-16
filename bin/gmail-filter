@@ -1,6 +1,9 @@
 #! /usr/bin/env python3
 #
 # Manage Gmail filters for mailing lists
+#
+# Install depedencies with:
+#  $ pip3 install --user pyyaml google-api-python-client google-auth-oauthlib
 
 from pprint import pprint
 import argparse
