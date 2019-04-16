@@ -1,0 +1,179 @@
+#! /usr/bin/env python3
+#
+# Manage Gmail filters for mailing lists
+
+from pprint import pprint
+import argparse
+import os
+import yaml
+
+MAX_FILTER_LEN = 1500
+
+def get_config_dir():
+    p = os.path.join(os.path.expanduser(os.environ.get('XDG_CONFIG_HOME', '~/.config')),
+            'gmail-filter')
+    os.makedirs(p, exist_ok=True)
+    return p
+
+def get_cache_dir():
+    p = os.path.join(os.path.expanduser(os.environ.get('XDG_CACHE_HOME', '~/.cache')),
+            'gmail-filter')
+    os.makedirs(p, exist_ok=True)
+    return p
+
+def get_gmail_service():
+    import pickle
+    import os.path
+    from googleapiclient.discovery import build
+    from google_auth_oauthlib.flow import InstalledAppFlow
+    from google.auth.transport.requests import Request
+
+    # If modifying these scopes, delete the file token.pickle.
+    SCOPES = ['https://www.googleapis.com/auth/gmail.readonly', 'https://www.googleapis.com/auth/gmail.settings.basic']
+
+    token_file = os.path.join(get_cache_dir(), 'token.pickle')
+
+    creds = None
+    # The file token.pickle stores the user's access and refresh tokens, and is
+    # created automatically when the authorization flow completes for the first
+    # time.
+    if os.path.exists(token_file):
+        with open(token_file, 'rb') as token:
+            creds = pickle.load(token)
+    # If there are no (valid) credentials available, let the user log in.
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        else:
+            flow = InstalledAppFlow.from_client_secrets_file(
+                os.path.join(get_config_dir(), 'credentials.json'), SCOPES)
+            creds = flow.run_local_server()
+        # Save the credentials for the next run
+        with open(token_file, 'wb') as token:
+            pickle.dump(creds, token)
+
+    return build('gmail', 'v1', credentials=creds)
+
+def get_filter_query(f):
+    l = f.get('list')
+    if l:
+        return 'list:%s' % l
+    if ' ' in f['query']:
+        return '(%s)' % f['query']
+    return f['query']
+
+def find_label_id(labels, name):
+    for l in labels:
+        if l['name'] == name:
+            return l['id']
+    raise Exception("No label '%s' found" % name)
+
+
+def create_filter(service, f, *, dry_run=False, allow_read=True):
+    body = {
+        'criteria': {
+            'query': get_filter_query(f),
+        },
+        'action': {
+            'addLabelIds': [],
+            'removeLabelIds': [],
+        }
+    }
+
+    lid = f.get('label_id')
+    if lid:
+        body['action']['addLabelIds'].append(lid)
+
+    if f.get('important'):
+        body['action']['addLabelIds'].append('STARRED')
+
+    if f.get('archive'):
+        body['action']['removeLabelIds'].append('INBOX')
+
+    if f.get('read'):
+        body['action']['removeLabelIds'].append('UNREAD')
+
+    # Don't handle marking as unread here. A rule will be written later
+    # to deal with cross list postings
+
+    if body['action']['addLabelIds'] or body['action']['removeLabelIds']:
+        if dry_run:
+            print("Create filter:")
+            pprint(body)
+        else:
+            service.users().settings().filters().create(userId='me', body=body).execute()
+
+def main():
+    parser = argparse.ArgumentParser(description='Generate gmail filters')
+    parser.add_argument('--dry-run', '-n', help="Don't make changes, just show what would be done", action='store_true')
+    parser.add_argument('--test-read-label', help='Apply label to messages marked as read')
+    parser.add_argument('--config', help='Input YAML config file. Default is %(default)s', default=os.path.join(get_config_dir(), 'filters.yaml'))
+
+    args = parser.parse_args()
+
+    with open(args.config, 'r') as f:
+        config = yaml.load(f, Loader=yaml.Loader)
+
+    me = config['me']
+
+    # Check that lists only contain a "list" match
+    for f in config.get('lists', []):
+        if 'query' in f:
+            print("ERROR: list entries may not contain 'query: %s'" % f['query'])
+            return 1
+
+    service = get_gmail_service()
+    labels = service.users().labels().list(userId='me').execute().get('labels', [])
+
+    for f in config.get('filters', []) + config.get('lists', []):
+        if f.get('label'):
+            f['label_id'] = find_label_id(labels, f['label'])
+
+    if args.test_read_label:
+        test_read_label_id = find_label_id(labels, args.test_read_label)
+
+    # Remove existing filters
+    results = service.users().settings().filters().list(userId='me').execute()
+    for f in results.get('filter', []):
+        if args.dry_run:
+            print("Delete filter %s" % f['id'])
+        else:
+            service.users().settings().filters().delete(userId='me', id=f['id']).execute()
+
+    for f in config.get('filters', []):
+        create_filter(service, f, dry_run=args.dry_run)
+
+    for f in config.get('lists', []):
+        create_filter(service, f, dry_run=args.dry_run, allow_read=False)
+
+    # Create the mark as unread filter that accounts for cross list posting
+    unread = [f for f in config.get('lists', []) if not f.get('read')]
+    mark_read = [f for f in config.get('lists', []) if f.get('read')]
+
+    if mark_read:
+        body = {
+            'criteria': {
+                'query': '(list:{' + ' '.join(f['list'] for f in mark_read) + '} -list:{' +
+                    ' '.join(f['list'] for f in unread) + '} -' + me + ')',
+            },
+            'action': {
+                'removeLabelIds': ['UNREAD'],
+            }
+        }
+
+        if args.test_read_label:
+            body['action']['addLabelIds'] = [test_read_label_id]
+
+        filter_len = len(body['criteria']['query'])
+        print("Read query length is %d of %d (%d%%)" % (
+            filter_len, MAX_FILTER_LEN, filter_len * 100 / MAX_FILTER_LEN))
+
+
+        if args.dry_run:
+            print("Create filter:")
+            pprint(body)
+        else:
+            service.users().settings().filters().create(userId='me', body=body).execute()
+
+if __name__ == "__main__":
+    main()

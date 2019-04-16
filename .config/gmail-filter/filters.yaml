@@ -1,0 +1,119 @@
+me: '{to:JPEWhacker@gmail.com "Joshua Watt"}'
+filters:
+  - query: "list:(yocto@yoctoproject.org) subject:(meta-mingw PATCH)"
+    label: "patches/meta-mingw"
+    important: true
+
+  - query: "list:yocto@yoctoproject.org subject:meta-mingw"
+    label: "yocto/meta-mingw"
+    important: true
+
+  - query: '{to:JPEWhacker@gmail.com "Joshua Watt"}'
+    label: "me"
+    important: true
+
+  - query: "from:builds@travis-ci.org"
+    label: "travis"
+
+lists:
+  - list: "avahi@lists.freedesktop.org"
+    label: "avahi"
+
+  - list: "binutils@sourceware.org"
+    label: "binutils"
+    archive: true
+    read: true
+
+  - list: "busybox@busybox.net"
+    label: "busybox"
+    archive: true
+    read: true
+
+  - list: "elfutils-devel@sourceware.org"
+    label: "elfutils"
+    archive: true
+    read: true
+
+  - list: "gcc-patches@gcc.gnu.org"
+    label: "gcc"
+    archive: true
+    read: true
+
+  - list: "git@vger.kernel.org"
+    label: "git"
+    archive: true
+    read: true
+
+  - list: "dri-devel@lists.freedesktop.org"
+    label: "kernel/dri-devel"
+    archive: true
+    read: true
+
+  - list: "linux-nfs@vger.kernel.org"
+    label: "kernel/linux-nfs"
+
+  - list: "ofono@ofono.org"
+    label: "ofono"
+    archive: true
+    read: true
+
+  - list: "sqlite-users@mailinglists.sqlite.org"
+    label: "sqlite-ml"
+    archive: true
+    read: true
+
+  - list: "u-boot@lists.denx.de"
+    label: "u-boot"
+    archive: true
+    read: true
+
+  - list: "util-linux@vger.kernel.org"
+    label: "util-linux"
+    archive: true
+    read: true
+
+  - list: "wayland-devel@lists.freedesktop.org"
+    label: "wayland"
+    archive: true
+    read: true
+
+  - list: "webkit-dev@lists.webkit.org"
+    label: "webkit/webkit-dev"
+    archive: true
+    read: true
+
+  - list: "webkit-wpe@lists.webkit.org"
+    label: "webkit/webkit-wpe"
+
+  - list: "bitbake-devel@lists.openembedded.org"
+    label: "yocto/bitbake-devel"
+
+  - list: "meta-ti@yoctoproject.org"
+    label: "yocto/meta-ti"
+
+  - list: "openembedded-architecture@lists.openembedded.org"
+    label: "yocto/oe-arch"
+
+  - list: "openembedded-core@lists.openembedded.org"
+    label: "yocto/oe-core"
+
+  - list: "openembedded-devel@lists.openembedded.org"
+    label: "yocto/oe-devel"
+
+  - list: "openembedded-members@lists.openembedded.org"
+    label: "yocto/oe-members"
+
+  - list: "poky@yoctoproject.org"
+    label: "yocto/poky"
+
+  - list: "yocto.yoctoproject.org"
+    label: "yocto/yocto"
+
+  - list: "yocto-ab@yoctoproject.org"
+    label: "yocto/yocto-ab"
+
+  - list: "yocto-perf@yoctoproject.org"
+    label: "yocto/yocto-perf"
+    archive: true
+    read: true
+
