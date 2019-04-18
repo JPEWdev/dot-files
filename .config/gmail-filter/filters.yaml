@@ -94,6 +94,9 @@ lists:
   - list: "bitbake-devel@lists.openembedded.org"
     label: "yocto/bitbake-devel"
 
+  - list: "meta-freescale@yoctoproject.org"
+    label: "yocto/meta-freescale"
+
   - list: "meta-ti@yoctoproject.org"
     label: "yocto/meta-ti"
 
