@@ -9,6 +9,7 @@ from pprint import pprint
 import argparse
 import os
 import yaml
+import tqdm
 
 MAX_FILTER_LEN = 1500
 
@@ -107,6 +108,9 @@ def create_filter(service, f, *, dry_run=False, allow_read=True):
             service.users().settings().filters().create(userId='me', body=body).execute()
 
 def main():
+    def progress_bar(*a, **kwargs):
+        return tqdm.tqdm(*a, disable=args.dry_run, ncols=120, **kwargs)
+
     parser = argparse.ArgumentParser(description='Generate gmail filters')
     parser.add_argument('--dry-run', '-n', help="Don't make changes, just show what would be done", action='store_true')
     parser.add_argument('--test-read-label', help='Apply label to messages marked as read')
@@ -126,57 +130,76 @@ def main():
             return 1
 
     service = get_gmail_service()
-    labels = service.users().labels().list(userId='me').execute().get('labels', [])
 
-    for f in config.get('filters', []) + config.get('lists', []):
-        if f.get('label'):
-            f['label_id'] = find_label_id(labels, f['label'])
-
-    if args.test_read_label:
-        test_read_label_id = find_label_id(labels, args.test_read_label)
-
-    # Remove existing filters
-    results = service.users().settings().filters().list(userId='me').execute()
-    for f in results.get('filter', []):
-        if args.dry_run:
-            print("Delete filter %s" % f['id'])
-        else:
-            service.users().settings().filters().delete(userId='me', id=f['id']).execute()
-
-    for f in config.get('filters', []):
-        create_filter(service, f, dry_run=args.dry_run)
-
-    for f in config.get('lists', []):
-        create_filter(service, f, dry_run=args.dry_run, allow_read=False)
+    current_filters = service.users().settings().filters().list(userId='me').execute().get('filter', [])
 
     # Create the mark as unread filter that accounts for cross list posting
     unread = [f for f in config.get('lists', []) if not f.get('read')]
     mark_read = [f for f in config.get('lists', []) if f.get('read')]
 
+    filters = config.get('filters', [])
+    lists = config.get('lists', [])
+
+    total = 1 + len(current_filters) + len(filters) + len(lists) 
     if mark_read:
-        body = {
-            'criteria': {
-                'query': '(list:{' + ' '.join(f['list'] for f in mark_read) + '} -list:{' +
-                    ' '.join(f['list'] for f in unread) + '} -' + me + ')',
-            },
-            'action': {
-                'removeLabelIds': ['UNREAD'],
-            }
-        }
+        total += 1
+
+    with progress_bar(total=total) as t:
+        t.set_description("Finding labels")
+
+        labels = service.users().labels().list(userId='me').execute().get('labels', [])
+        for f in filters + lists:
+            if f.get('label'):
+                f['label_id'] = find_label_id(labels, f['label'])
 
         if args.test_read_label:
-            body['action']['addLabelIds'] = [test_read_label_id]
+            test_read_label_id = find_label_id(labels, args.test_read_label)
 
-        filter_len = len(body['criteria']['query'])
-        print("Read query length is %d of %d (%d%%)" % (
-            filter_len, MAX_FILTER_LEN, filter_len * 100 / MAX_FILTER_LEN))
+        t.update()
+
+        t.set_description("Removing filters")
+        for f in current_filters:
+            t.update()
+            if args.dry_run:
+                print("Delete filter %s" % f['id'])
+            else:
+                service.users().settings().filters().delete(userId='me', id=f['id']).execute()
+
+        t.set_description("Creating filters")
+        for f in filters:
+            t.update()
+            create_filter(service, f, dry_run=args.dry_run)
+
+        for f in lists:
+            t.update()
+            create_filter(service, f, dry_run=args.dry_run, allow_read=False)
 
 
-        if args.dry_run:
-            print("Create filter:")
-            pprint(body)
-        else:
-            service.users().settings().filters().create(userId='me', body=body).execute()
+        if mark_read:
+            t.update()
+            body = {
+                'criteria': {
+                    'query': '(list:{' + ' '.join(f['list'] for f in mark_read) + '} -list:{' +
+                        ' '.join(f['list'] for f in unread) + '} -' + me + ')',
+                },
+                'action': {
+                    'removeLabelIds': ['UNREAD'],
+                }
+            }
+
+            if args.test_read_label:
+                body['action']['addLabelIds'] = [test_read_label_id]
+
+            filter_len = len(body['criteria']['query'])
+
+            t.write("Read query length is %d of %d (%d%%)" % (
+                filter_len, MAX_FILTER_LEN, filter_len * 100 / MAX_FILTER_LEN))
+
+            if args.dry_run:
+                print("Create filter:")
+                pprint(body)
+            else:
+                service.users().settings().filters().create(userId='me', body=body).execute()
 
 if __name__ == "__main__":
     main()
