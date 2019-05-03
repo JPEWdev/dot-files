@@ -93,7 +93,7 @@ def create_filter(service, f, *, dry_run=False, allow_read=True):
     if f.get('archive'):
         body['action']['removeLabelIds'].append('INBOX')
 
-    if f.get('read'):
+    if f.get('read') and allow_read:
         body['action']['removeLabelIds'].append('UNREAD')
 
     # Don't handle marking as unread here. A rule will be written later
