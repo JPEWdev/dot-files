@@ -48,6 +48,8 @@ if __name__ == "__main__":
         for rarg in args.reviewer:
             for r in rarg.split():
                 user = r
+                if user == "none":
+                    continue
 
                 p = subprocess.run(['git', 'config', '--get', 'pushgerrit.useraliases.' + r], stdout=subprocess.PIPE)
                 if p.returncode == 0:
