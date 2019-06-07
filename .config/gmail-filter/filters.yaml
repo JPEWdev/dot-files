@@ -1,4 +1,4 @@
-me: '{to:JPEWhacker@gmail.com "Joshua Watt"}'
+me: '{to:JPEWhacker@gmail.com "Joshua Watt" to:JPEW.hacker@gmail.com}'
 filters:
   - query: "list:(yocto@yoctoproject.org) subject:(meta-mingw PATCH)"
     label: "patches/meta-mingw"
