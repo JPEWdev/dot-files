@@ -1,11 +1,31 @@
 #! /bin/sh
 
+CONFIG=mutt.startfolder
 MUTT=$(which mutt)
 
-STARTFOLDER="$(git config mutt.startfolder)"
+STARTFOLDER="$(git config $CONFIG)"
 if [ -n "$STARTFOLDER" ]; then
+    if !(echo "$STARTFOLDER" | grep -q "^\+"); then
+        echo "$CONFIG = '$STARTFOLDER' must begin with a '+'"
+        exit 1
+    fi
     MUTT="$MUTT -f $STARTFOLDER"
 fi
+
+echo "Key bindings:"
+echo "  t  Tag message"
+echo "  (t Dumps tagged patches into ~/incoming/*.mbox"
+echo "  (a git am ~/incoming/*.mbox"
+echo "  (g git am tagged patches"
+echo "  (c Run checkpatch on ~/incoming/*"
+echo "  (r Nukes all ~/incoming/"
+echo "  (l ls -l ~/incoming/"
+echo "  ,t Dumps currently viewed patch into ~/incoming/*.mbox"
+echo "  ,g git am currently viewed patch"
+echo "  ,a git am --abort"
+echo "  ,r git-reset --hard origin"
+echo
+read -p "Press Enter to continue"
 
 exec $MUTT
 
