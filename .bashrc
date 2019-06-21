@@ -8,9 +8,18 @@ case $- in
       *) return;;
 esac
 
-PATH="$PATH:~/bin"
+add_to_path() {
+    if [ -d $1 ]; then
+        case ":$PATH:" in
+            (*:$1:*) ;;
+            (*) PATH="$PATH:$1"
+        esac
+    fi
+}
 
-[ -d ~/.cargo/bin ] && PATH="$PATH:~/.cargo/bin"
+add_to_path $HOME/bin
+add_to_path $HOME/.local/bin
+add_to_path $HOME/.cargo/bin
 
 [ -e /usr/share/fzf/shell/key-bindings.bash ] && source /usr/share/fzf/shell/key-bindings.bash
 
