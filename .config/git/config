@@ -48,6 +48,8 @@
     args = --to='{{LS}}consumer-yocto@garmin.com' --smtp-auth=none --smtp-server=smtp.garmin.com --subject-prefix=yocto-2.2][poky][PATCH --cover-letter --annotate
 [sendpatch "git"]
     args = -s --to='git@vger.kernel.org'
+[sendpatch "u-boot"]
+    args = -s --to='u-boot@lists.denx.de' --cc-cmd='scripts/get_maintainer.pl -i'
 [mutt]
     startfolder = =patches/to-apply
 
