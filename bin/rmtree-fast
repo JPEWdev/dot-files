@@ -24,15 +24,20 @@ import argparse
 import subprocess
 import sys
 import tempfile
+import os
 
 def main():
     parser = argparse.ArgumentParser(description="Delete directories quickly")
-    parser.add_argument('path', help='Path to remove')
+    parser.add_argument('path', help='Path to remove', nargs='+')
 
     args = parser.parse_args()
 
     with tempfile.TemporaryDirectory() as empty_tmp_dir:
-        result = subprocess.run(['rsync', '-a', '--delete', empty_tmp_dir + '/', args.path + '/'])
+        for p in args.path:
+            result = subprocess.run(['rsync', '-a', '--delete', empty_tmp_dir + '/', p + '/'])
+
+    for p in args.path:
+        os.rmdir(p)
 
     return result.returncode
 
