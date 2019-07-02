@@ -8,7 +8,7 @@ filters:
     label: "yocto/meta-mingw"
     important: true
 
-  - query: '{to:JPEWhacker@gmail.com "Joshua Watt"}'
+  - query: '{to:JPEWhacker@gmail.com "Joshua Watt" to:JPEW.hacker@gmail.com}'
     label: "me"
     important: true
 
