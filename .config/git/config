@@ -37,7 +37,9 @@
 [pretty]
     quote = %h (\"%s\")
 [sendpatch "meta-mingw"]
-    args = -s --to=yocto@yoctoproject.org --subject-prefix=yocto][meta-mingw]{branch}[PATCH
+    args = -s --to=yocto@lists.yoctoproject.org --subject-prefix=yocto][meta-mingw]{branch}[PATCH
+[sendpatch "meta-gplv2"]
+    args = -s --to=yocto@lists.yoctoproject.org --subject-prefix=yocto][meta-gplv2]{branch}[PATCH
 [sendpatch "oe-core"]
     args = -s --to=openembedded-core@lists.openembedded.org --subject-prefix=OE-core]{branch}[PATCH
 [sendpatch "meta-poky"]
