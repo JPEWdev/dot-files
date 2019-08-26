@@ -1,10 +1,10 @@
 me: '{to:JPEWhacker@gmail.com "Joshua Watt" to:JPEW.hacker@gmail.com}'
 filters:
-  - query: "list:(yocto@yoctoproject.org) subject:(meta-mingw PATCH)"
+  - query: "list:{yocto@yoctoproject.org yocto@lists.yoctoproject.org} subject:(meta-mingw PATCH)"
     label: "patches/meta-mingw"
     important: true
 
-  - query: "list:yocto@yoctoproject.org subject:meta-mingw"
+  - query: "list:{yocto@yoctoproject.org yocto@lists.yoctoproject.org} subject:meta-mingw"
     label: "yocto/meta-mingw"
     important: true
 
@@ -100,7 +100,13 @@ lists:
   - list: "meta-freescale@yoctoproject.org"
     label: "yocto/meta-freescale"
 
+  - list: "meta-freescale@lists.yoctoproject.org"
+    label: "yocto/meta-freescale"
+
   - list: "meta-ti@yoctoproject.org"
+    label: "yocto/meta-ti"
+
+  - list: "meta-ti@lists.yoctoproject.org"
     label: "yocto/meta-ti"
 
   - list: "openembedded-architecture@lists.openembedded.org"
@@ -118,13 +124,27 @@ lists:
   - list: "poky@yoctoproject.org"
     label: "yocto/poky"
 
-  - list: "yocto.yoctoproject.org"
+  - list: "poky@lists.yoctoproject.org"
+    label: "yocto/poky"
+
+  - list: "yocto@yoctoproject.org"
+    label: "yocto/yocto"
+
+  - list: "yocto@lists.yoctoproject.org"
     label: "yocto/yocto"
 
   - list: "yocto-ab@yoctoproject.org"
     label: "yocto/yocto-ab"
 
+  - list: "yocto-ab@lists.yoctoproject.org"
+    label: "yocto/yocto-ab"
+
   - list: "yocto-perf@yoctoproject.org"
+    label: "yocto/yocto-perf"
+    archive: true
+    read: true
+
+  - list: "yocto-perf@lists.yoctoproject.org"
     label: "yocto/yocto-perf"
     archive: true
     read: true
