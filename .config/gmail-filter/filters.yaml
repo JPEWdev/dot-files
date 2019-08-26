@@ -149,3 +149,6 @@ lists:
     archive: true
     read: true
 
+  - list: "tsc@lists.openembedded.org"
+    label: "yocto/oe-tsc"
+
