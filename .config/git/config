@@ -43,7 +43,7 @@
 [sendpatch "oe-core"]
     args = -s --to=openembedded-core@lists.openembedded.org --subject-prefix=OE-core]{branch}[PATCH
 [sendpatch "meta-poky"]
-    args = -s --to=poky@yoctoproject.org --subject-prefix=poky][meta-poky]{branch}[PATCH
+    args = -s --to=poky@lists.yoctoproject.org --subject-prefix=poky][meta-poky]{branch}[PATCH
 [sendpatch "bitbake"]
     args = -s --to=bitbake-devel@lists.openembedded.org --subject-prefix=bitbake-devel]{branch}[PATCH
 [sendpatch "garmin-morty-poky"]
