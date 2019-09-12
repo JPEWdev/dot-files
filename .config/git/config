@@ -52,6 +52,9 @@
     args = -s --to='git@vger.kernel.org'
 [sendpatch "u-boot"]
     args = -s --to='u-boot@lists.denx.de' --cc-cmd='scripts/get_maintainer.pl -i'
+[sendpatch "nfs-utils"]
+    args = -s --to=linux-nfs@vger.kernel.org --subject-prefix='nfs-utils PATCH'
+
 [mutt]
     startfolder = =patches/to-apply
 
