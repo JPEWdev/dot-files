@@ -22,7 +22,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    cmd = ['git', 'rev-parse', '--abbrev-ref', '--symbolic-full-name', '@{upstream}']
+    cmd = ['git', 'rev-parse', '--abbrev-ref', '--symbolic-full-name', '@{push}']
     if args.verbose:
         print(' '.join(cmd))
     p = subprocess.run(cmd, stdout=subprocess.PIPE)
