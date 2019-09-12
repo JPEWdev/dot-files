@@ -21,6 +21,9 @@ filters:
   - query: "from:@garmin.com"
     label: "garmin"
 
+  - query: "{from:JPEWhacker@gmail.com from:JPEW.hacker@gmail.com} subject:PATCH -subject:RE"
+    label: "patches/in-progress"
+
 lists:
   - list: "avahi@lists.freedesktop.org"
     label: "avahi"
