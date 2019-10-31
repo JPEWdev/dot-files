@@ -94,6 +94,10 @@ xterm*|rxvt*)
     ;;
 esac
 
+# Fedora 31 seems to set this to some weird value that inserts annoying output,
+# so clear it out.
+unset PS0
+
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
