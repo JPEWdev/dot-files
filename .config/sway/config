@@ -19,6 +19,9 @@ set $term gnome-terminal
 # Note: it's recommended that you pass the final command to sway
 set $menu dmenu_path | dmenu | xargs swaymsg exec --
 set $background /usr/share/backgrounds/f31/default/normalish/f31.png fill
+set $lock swaylock -e -f -c 000000 -i $background
+
+include ~/.config/sway/local.config
 
 ### Output configuration
 #
@@ -33,20 +36,17 @@ output * bg $background
 # You can get the names of your outputs by running: swaymsg -t get_outputs
 
 ### Idle configuration
-#
-# Example configuration:
-#
 exec swayidle -w \
-         timeout 300 'swaylock -f -c 000000 -i $background' \
+         timeout 300 '$lock' \
          timeout 600 'swaymsg "output * dpms off"' \
               resume 'swaymsg "output * dpms on"' \
-         before-sleep 'swaylock -f -c 000000 -i $background'
+         before-sleep '$lock'
 #
 # This will lock your screen after 300 seconds of inactivity, then turn off
 # your displays after another 300 seconds, and turn your screens back on when
 # resumed. It will also lock your screen before your computer goes to sleep.
 
-exec mako --anchor top-center --output DVI-I-1
+exec mako $makoargs
 
 ### Input configuration
 #
@@ -222,4 +222,3 @@ bar {
 }
 
 include /etc/sway/config.d/*
-include ~/.config/sway/local.config
