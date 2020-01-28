@@ -224,4 +224,10 @@ bar {
     }
 }
 
+for_window [class="Qemu-system"] {
+    floating enabled
+    resize set 1280 1024
+}
+no_focus [class="Qemu-system"]
+
 include /etc/sway/config.d/*

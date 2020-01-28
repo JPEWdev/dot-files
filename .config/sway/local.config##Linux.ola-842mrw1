@@ -4,3 +4,5 @@ output DP-2 pos 3200 0 res 1920x1080
 
 set $makoargs --output=DVI-I-1 --width=1000
 
+for_window [class="Qemu-system"] move window to workspace 2
+
