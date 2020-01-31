@@ -142,6 +142,12 @@ lists:
   - list: "yocto-ab@lists.yoctoproject.org"
     label: "yocto/yocto-ab"
 
+  - list: "docs@lists.yoctoproject.org"
+    label: "yocto/docs"
+
+  - list: "licensing@lists.yoctoproject.org"
+    label: "yocto/licensing"
+
   - list: "yocto-perf@yoctoproject.org"
     label: "yocto/yocto-perf"
     archive: true
