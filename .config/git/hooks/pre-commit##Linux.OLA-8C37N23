@@ -1,0 +1,8 @@
+#! /bin/sh
+if [ -x /projects/garmin/scripts/clang_format_hook.py ]; then
+    /projects/garmin/scripts/clang_format_hook.py -i
+fi
+
+if [ -x /projects/garmin/scripts/update_copyright.py ]; then
+    /projects/garmin/scripts/update_copyright.py -ig
+fi
