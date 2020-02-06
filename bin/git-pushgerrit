@@ -9,7 +9,42 @@ import subprocess
 import sys
 import argparse
 
-if __name__ == "__main__":
+def get_current_branch():
+    cmd = ['git', 'rev-parse', '--abbrev-ref', '--symbolic-full-name', 'HEAD']
+    p = subprocess.run(cmd, stdout=subprocess.PIPE)
+    if p.returncode == 0:
+        return p.stdout.decode('utf-8').splitlines()[0].strip()
+    return None
+
+def get_upstream_branch(args):
+    upstream = None
+
+    current_branch = get_current_branch()
+    if current_branch is not None:
+        cmd = ['git', 'config', 'branch.%s.pushgerrit' % current_branch]
+        p = subprocess.run(cmd, stdout=subprocess.PIPE)
+        if p.returncode == 0:
+            upstream = p.stdout.decode('utf-8').splitlines()[0].strip()
+
+    if upstream:
+        return upstream
+
+    cmd = ['git', 'rev-parse', '--abbrev-ref', '--symbolic-full-name', '@{push}']
+    if args.verbose:
+        print(' '.join(cmd))
+    p = subprocess.run(cmd, stdout=subprocess.PIPE)
+    if p.returncode != 0:
+        return None
+
+    upstream = p.stdout.decode('utf-8').splitlines()[0].strip()
+
+    if not upstream:
+        print("No upstream branch")
+        return None
+
+    return upstream
+
+def main():
     parser = argparse.ArgumentParser(description='Push to gerrit')
 
     parser.add_argument('source', nargs='?', help='Source object to push', default='HEAD')
@@ -19,20 +54,22 @@ if __name__ == "__main__":
     parser.add_argument('--verified', action='store_true', help='Mark as verified')
     parser.add_argument('--verbose', '-v', action='count', help='Increase verbosity', default=0)
     parser.add_argument('--draft', action='store_true', help='Push as draft')
+    parser.add_argument('--set-target', help='Set current branch push target')
 
     args = parser.parse_args()
 
-    cmd = ['git', 'rev-parse', '--abbrev-ref', '--symbolic-full-name', '@{push}']
-    if args.verbose:
-        print(' '.join(cmd))
-    p = subprocess.run(cmd, stdout=subprocess.PIPE)
-    if p.returncode != 0:
+    if args.set_target:
+        current_branch = get_current_branch()
+        if current_branch is None:
+            print("Cannot get current branch")
+            sys.exit(1)
+
+        cmd = ['git', 'config', '--local', 'branch.%s.pushgerrit' % current_branch, args.set_target]
+        p = subprocess.run(cmd)
         sys.exit(p.returncode)
 
-    upstream = p.stdout.decode('ascii').splitlines()[0].strip()
-
-    if not upstream:
-        print("No upstream branch")
+    upstream = get_upstream_branch(args)
+    if upstream is None:
         sys.exit(1)
 
     (remote, branch) = upstream.split('/', 1)
@@ -70,3 +107,6 @@ if __name__ == "__main__":
         print(' '.join(cmd))
     p = subprocess.run(cmd)
     sys.exit(p.returncode)
+
+if __name__ == "__main__":
+    main()
