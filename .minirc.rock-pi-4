@@ -1,0 +1,5 @@
+pu port     /dev/tty-rock-pi-4b
+pu baudrate 1500000
+pu rtscts   no
+pu xonxoff  no
+

@@ -1,0 +1,5 @@
+pu port     /dev/tty-tinkerboard
+pu baudrate 115200
+pu rtscts   no
+pu xonxoff  no
+

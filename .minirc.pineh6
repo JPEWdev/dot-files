@@ -1,0 +1,4 @@
+pu port     /dev/tty-pineh64
+pu baudrate 115200
+pu rtscts   no
+pu xonxoff  no
