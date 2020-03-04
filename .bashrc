@@ -20,6 +20,7 @@ add_to_path() {
 add_to_path $HOME/bin
 add_to_path $HOME/.local/bin
 add_to_path $HOME/.cargo/bin
+add_to_path $HOME/go/bin
 
 [ -e /usr/share/fzf/shell/key-bindings.bash ] && source /usr/share/fzf/shell/key-bindings.bash
 
