@@ -58,6 +58,10 @@
     args = -s --to=linux-nfs@vger.kernel.org --subject-prefix='nfs-utils PATCH'
 [sendpatch "kernel"]
     args = -s --cc-cmd='scripts/get_maintainer.pl --nol -i' --to-cmd='scripts/get_maintainer.pl --nom --nor -i'
+[sendpatch "meta-oe"]
+    args = --to openembedded-devel@lists.openembedded.org --subject-prefix=oe][meta-oe]{branch}[PATCH
+[sendpatch "meta-arm"]
+    args = -s --to=meta-arm@lists.yoctoproject.org --subject-prefix=meta-arm]{branch}[PATCH
 [mutt]
     startfolder = =patches/to-apply
 
