@@ -161,3 +161,6 @@ lists:
   - list: "tsc@lists.openembedded.org"
     label: "yocto/oe-tsc"
 
+  - list: "meta-arm@lists.yoctoproject.org"
+    label: "yocto/meta-arm"
+
