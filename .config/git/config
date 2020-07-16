@@ -62,6 +62,12 @@
     args = --to openembedded-devel@lists.openembedded.org --subject-prefix=oe][meta-oe]{branch}[PATCH
 [sendpatch "meta-arm"]
     args = -s --to=meta-arm@lists.yoctoproject.org --subject-prefix=meta-arm]{branch}[PATCH
+[sendpatch "swupdate"]
+    args = -s --to=swupdate@googlegroups.com
+[sendpatch "meta-swupdate"]
+    args = -s --to=swupdate@googlegroups.com --subject-prefix=meta-swupdate]{branch}[PATCH
+[sendpatch "yocto-docs"]
+    args = -s --to=docs@lists.yoctoproject.org --subject-prefix=docs][PATCH
 [mutt]
     startfolder = =patches/to-apply
 
