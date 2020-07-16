@@ -2,4 +2,9 @@
 */alchemy*/downloads/
 */alchemy*/deliverables/
 /projects/poky*/build/
+*/alchemy*/build/
+
+*~
+*.orig
+*.map
 
