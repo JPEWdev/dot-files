@@ -68,6 +68,8 @@
     args = -s --to=swupdate@googlegroups.com --subject-prefix=meta-swupdate]{branch}[PATCH
 [sendpatch "yocto-docs"]
     args = -s --to=docs@lists.yoctoproject.org --subject-prefix=docs][PATCH
+[sendpatch "pseudo"]
+    args = -s --to=openembedded-core@lists.openembedded.org --subject-prefix=pseudo]{branch}[PATCH
 [mutt]
     startfolder = =patches/to-apply
 
