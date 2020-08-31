@@ -56,6 +56,7 @@ def main():
     parser.add_argument('--draft', action='store_true', help='Push as draft')
     parser.add_argument('--set-target', help='Set current branch push target')
     parser.add_argument('--wip', action='store_true', help='Push as Work-in-Progress')
+    parser.add_argument('--private', action='store_true', help='Push as Private')
 
     args = parser.parse_args()
 
@@ -102,6 +103,8 @@ def main():
         gerrit_args.append('label=Verified+1')
     if args.wip:
         gerrit_args.append('wip')
+    if args.private:
+        gerrit_args.append('private')
 
     if gerrit_args:
         cmd[-1] += '%' + ','.join(gerrit_args)
