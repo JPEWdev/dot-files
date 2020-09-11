@@ -1,0 +1,29 @@
+#! /usr/bin/env python3
+
+import argparse
+import os
+import sys
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Upload SWU file")
+    parser.add_argument("target", help="Target address")
+    parser.add_argument("update", help="Update file (.swu)")
+
+    args = parser.parse_args()
+
+    os.execlp(
+        "curl",
+        "curl",
+        "-X",
+        "POST",
+        "-F",
+        "filedata=@%s" % args.update,
+        "http://%s:8080/upload" % args.target,
+    )
+
+    return 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())
