@@ -11,4 +11,10 @@ wget https://raw.githubusercontent.com/jirutka/esh/v0.3.0/esh -O $HOME/bin/esh \
 
 chmod u+x $HOME/bin/esh
 
+wget https://github.com/junegunn/fzf-bin/releases/download/0.22.0/fzf-0.22.0-linux_amd64.tgz \
+    -O /tmp/fzf.tar.gz \
+    && echo "64d0816a153daeee0280fc82fb1d9328d5f83a0b  /tmp/fzf.tar.gz" | sha1sum -c \
+    || exit 1
+
+tar -xvzf /tmp/fzf.tar.gz -C $HOME/bin
 
