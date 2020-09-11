@@ -35,7 +35,8 @@ shopt -s histappend
 HISTSIZE=1000
 HISTFILESIZE=2000
 
-export FZF_DEFAULT_COMMAND="rg --files --no-ignore-vcs --ignore-file $HOME/.ignore --ignore-file $HOME/.ignore.local"
+export FZF_DEFAULT_COMMAND="rg --files"
+export RIPGREP_CONFIG_PATH="$HOME/.rgrc"
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -151,3 +152,7 @@ if [ -e ~/.bashrc.local ]; then
 fi
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+
+# added by travis gem
+[ ! -s /home/wattj/.travis/travis.sh ] || source /home/wattj/.travis/travis.sh
