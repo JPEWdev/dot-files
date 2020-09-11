@@ -35,6 +35,8 @@ shopt -s histappend
 HISTSIZE=1000
 HISTFILESIZE=2000
 
+export FZF_DEFAULT_COMMAND="rg --files --no-ignore-vcs --ignore-file $HOME/.ignore --ignore-file $HOME/.ignore.local"
+
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
