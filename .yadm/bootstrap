@@ -1,0 +1,14 @@
+#! /bin/sh
+
+set -eu
+
+mkdir -p $HOME/bin
+
+# Install 3rd party tools
+wget https://raw.githubusercontent.com/jirutka/esh/v0.3.0/esh -O $HOME/bin/esh \
+    && echo "fe030e23fc1383780d08128eecf322257cec743b  $HOME/bin/esh" | sha1sum -c \
+    || exit 1
+
+chmod u+x $HOME/bin/esh
+
+
