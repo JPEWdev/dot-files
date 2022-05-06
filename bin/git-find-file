@@ -1,0 +1,54 @@
+#! /bin/sh
+#
+# Find all branches which contain a file
+
+REFSPEC="refs/heads/"
+PATTERN_OPT="--fixed-strings"
+
+usage()
+    {
+    echo "Usage $(basename $0): [-h|--help] [-r|--remote] PATTERN"
+    echo "  --remote            Search remote branches"
+    echo "  --regex             Interpret PATTERN as regular expression"
+}
+
+OPTS=$(getopt -n $(basename "$0") -o hrx -l help,remote,regex -- "$@")
+eval set -- "$OPTS"
+
+
+while true; do
+    arg="$1"
+    shift
+
+    case $arg in
+        --help|-h)
+            usage
+            exit 0
+            ;;
+
+        --remote|-r)
+            REFSPEC="refs/remotes/"
+            ;;
+
+        --regex|-x)
+            PATTERN_OPT="--basic-regexp"
+            ;;
+
+        --)
+            break
+            ;;
+    esac
+done
+
+if [ -z "$1" ]; then
+    echo "ERROR: 'PATTERN' is required"
+    usage
+    exit 1
+fi
+
+for branch in $(git for-each-ref --format="%(refname)" $REFSPEC); do
+    if (git ls-tree -r --name-only $branch | grep $PATTERN_OPT --quiet "$1")
+    then
+        echo $branch
+    fi
+done
