@@ -1,0 +1,2 @@
+# I hate CTRL+S (Freeze terminal)
+stty -ixon
