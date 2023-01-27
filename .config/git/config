@@ -30,10 +30,16 @@
 	hooksPath = ~/.config/git/hooks/
 [url "ssh://git@push.yoctoproject.org/poky-contrib"]
     pushInsteadOf = git://git.yoctoproject.org/poky-contrib
+    pushInsteadOf = http://git.yoctoproject.org/poky-contrib
+    pushInsteadOf = https://git.yoctoproject.org/poky-contrib
 [url "ssh://git@push.yoctoproject.org/meta-mingw-contrib"]
     pushInsteadOf = git://git.yoctoproject.org/meta-mingw-contrib
+    pushInsteadOf = http://git.yoctoproject.org/meta-mingw-contrib
+    pushInsteadOf = https://git.yoctoproject.org/meta-mingw-contrib
 [url "ssh://git@push.yoctoproject.org/meta-mingw"]
     pushInsteadOf = git://git.yoctoproject.org/meta-mingw
+    pushInsteadOf = http://git.yoctoproject.org/meta-mingw
+    pushInsteadOf = https://git.yoctoproject.org/meta-mingw
 [pretty]
     quote = %h (\"%s\")
 [sendpatch "meta-mingw"]
