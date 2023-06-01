@@ -25,7 +25,7 @@ echo "  ,g git am currently viewed patch"
 echo "  ,a git am --abort"
 echo "  ,r git-reset --hard origin"
 echo
-read -p "Press Enter to continue"
+read -p "Press Enter to continue" DUMMY
 
 exec $MUTT
 
