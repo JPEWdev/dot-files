@@ -191,6 +191,6 @@ _gen_ChangeId() {
 }
 
 # If there is a gerrit remote, add commit hooks
-if git remote -v | grep -q 'gerrit\..*\.garmin.com'; then
+if git remote -v | grep -q '\(gerrit\(-test\)\?\..*\.garmin.com\)\|\(review\.opendev\.org\)'; then
     add_ChangeId
 fi
