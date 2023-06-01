@@ -51,6 +51,7 @@ def main():
     parser.add_argument('--reviewer', '-r', action='append', help='Add reviewers', default=[])
     parser.add_argument('--topic', '-t', help='Set topic')
     parser.add_argument('--code-review', action='store_true', help='Mark as code reviewed')
+    parser.add_argument('--label', '-l', metavar=('LABEL', 'SCORE'), nargs=2, action='append', help="Add label (score)", default=[])
     parser.add_argument('--verified', action='store_true', help='Mark as verified')
     parser.add_argument('--verbose', '-v', action='count', help='Increase verbosity', default=0)
     parser.add_argument('--draft', action='store_true', help='Push as draft')
@@ -101,6 +102,8 @@ def main():
         gerrit_args.append('label=Code-Review+2')
     if args.verified:
         gerrit_args.append('label=Verified+1')
+    for l in args.label:
+        gerrit_args.append(f'label={l[0]}{int(l[1]):+}')
     if args.wip:
         gerrit_args.append('wip')
     if args.private:
