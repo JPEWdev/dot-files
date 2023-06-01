@@ -21,6 +21,7 @@ add_to_path $HOME/bin
 add_to_path $HOME/.local/bin
 add_to_path $HOME/.cargo/bin
 add_to_path $HOME/go/bin
+add_to_path $HOME/.npm-global/bin
 
 [ -e /usr/share/fzf/shell/key-bindings.bash ] && source /usr/share/fzf/shell/key-bindings.bash
 
@@ -156,3 +157,4 @@ fi
 
 # added by travis gem
 [ ! -s /home/wattj/.travis/travis.sh ] || source /home/wattj/.travis/travis.sh
+. "$HOME/.cargo/env"
