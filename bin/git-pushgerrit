@@ -9,34 +9,36 @@ import subprocess
 import sys
 import argparse
 
+
 def get_current_branch():
-    cmd = ['git', 'rev-parse', '--abbrev-ref', '--symbolic-full-name', 'HEAD']
+    cmd = ["git", "rev-parse", "--abbrev-ref", "--symbolic-full-name", "HEAD"]
     p = subprocess.run(cmd, stdout=subprocess.PIPE)
     if p.returncode == 0:
-        return p.stdout.decode('utf-8').splitlines()[0].strip()
+        return p.stdout.decode("utf-8").splitlines()[0].strip()
     return None
+
 
 def get_upstream_branch(args):
     upstream = None
 
     current_branch = get_current_branch()
     if current_branch is not None:
-        cmd = ['git', 'config', 'branch.%s.pushgerrit' % current_branch]
+        cmd = ["git", "config", "branch.%s.pushgerrit" % current_branch]
         p = subprocess.run(cmd, stdout=subprocess.PIPE)
         if p.returncode == 0:
-            upstream = p.stdout.decode('utf-8').splitlines()[0].strip()
+            upstream = p.stdout.decode("utf-8").splitlines()[0].strip()
 
     if upstream:
         return upstream
 
-    cmd = ['git', 'rev-parse', '--abbrev-ref', '--symbolic-full-name', '@{push}']
+    cmd = ["git", "rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{push}"]
     if args.verbose:
-        print(' '.join(cmd))
+        print(" ".join(cmd))
     p = subprocess.run(cmd, stdout=subprocess.PIPE)
     if p.returncode != 0:
         return None
 
-    upstream = p.stdout.decode('utf-8').splitlines()[0].strip()
+    upstream = p.stdout.decode("utf-8").splitlines()[0].strip()
 
     if not upstream:
         print("No upstream branch")
@@ -44,20 +46,42 @@ def get_upstream_branch(args):
 
     return upstream
 
-def main():
-    parser = argparse.ArgumentParser(description='Push to gerrit')
 
-    parser.add_argument('source', nargs='?', help='Source object to push', default='HEAD')
-    parser.add_argument('--reviewer', '-r', action='append', help='Add reviewers', default=[])
-    parser.add_argument('--topic', '-t', help='Set topic')
-    parser.add_argument('--code-review', action='store_true', help='Mark as code reviewed')
-    parser.add_argument('--label', '-l', metavar=('LABEL', 'SCORE'), nargs=2, action='append', help="Add label (score)", default=[])
-    parser.add_argument('--verified', action='store_true', help='Mark as verified')
-    parser.add_argument('--verbose', '-v', action='count', help='Increase verbosity', default=0)
-    parser.add_argument('--draft', action='store_true', help='Push as draft')
-    parser.add_argument('--set-target', help='Set current branch push target')
-    parser.add_argument('--wip', action='store_true', help='Push as Work-in-Progress')
-    parser.add_argument('--private', action='store_true', help='Push as Private')
+def main():
+    parser = argparse.ArgumentParser(description="Push to gerrit")
+
+    parser.add_argument(
+        "source", nargs="?", help="Source object to push", default="HEAD"
+    )
+    parser.add_argument(
+        "--reviewer", "-r", action="append", help="Add reviewers", default=[]
+    )
+    parser.add_argument("--topic", "-t", help="Set topic")
+    parser.add_argument(
+        "--code-review", action="store_true", help="Mark as code reviewed"
+    )
+    parser.add_argument(
+        "--label",
+        "-l",
+        metavar=("LABEL", "SCORE"),
+        nargs=2,
+        action="append",
+        help="Add label (score)",
+        default=[],
+    )
+    parser.add_argument("--verified", action="store_true", help="Mark as verified")
+    parser.add_argument(
+        "--verbose", "-v", action="count", help="Increase verbosity", default=0
+    )
+    parser.add_argument("--draft", action="store_true", help="Push as draft")
+    parser.add_argument("--set-target", help="Set current branch push target")
+    parser.add_argument(
+        "--upstream",
+        metavar="REMOTE/BRANCH",
+        help="Push as a review for BRANCH on REMOTE (overrides remote tracking branch detection)",
+    )
+    parser.add_argument("--wip", action="store_true", help="Push as Work-in-Progress")
+    parser.add_argument("--private", action="store_true", help="Push as Private")
 
     args = parser.parse_args()
 
@@ -67,21 +91,30 @@ def main():
             print("Cannot get current branch")
             sys.exit(1)
 
-        cmd = ['git', 'config', '--local', 'branch.%s.pushgerrit' % current_branch, args.set_target]
+        cmd = [
+            "git",
+            "config",
+            "--local",
+            "branch.%s.pushgerrit" % current_branch,
+            args.set_target,
+        ]
         p = subprocess.run(cmd)
         sys.exit(p.returncode)
 
-    upstream = get_upstream_branch(args)
-    if upstream is None:
-        sys.exit(1)
+    if args.upstream:
+        upstream = args.upstream
+    else:
+        upstream = get_upstream_branch(args)
+        if upstream is None:
+            sys.exit(1)
 
-    (remote, branch) = upstream.split('/', 1)
+    (remote, branch) = upstream.split("/", 1)
 
-    dest = 'refs/for'
+    dest = "refs/for"
     if args.draft:
-        dest = 'refs/drafts'
+        dest = "refs/drafts"
 
-    cmd = ['git', 'push', remote, args.source + ':' + dest + '/' + branch]
+    cmd = ["git", "push", remote, args.source + ":" + dest + "/" + branch]
 
     gerrit_args = []
     if args.reviewer:
@@ -91,31 +124,35 @@ def main():
                 if user == "none":
                     continue
 
-                p = subprocess.run(['git', 'config', '--get', 'pushgerrit.useraliases.' + r], stdout=subprocess.PIPE)
+                p = subprocess.run(
+                    ["git", "config", "--get", "pushgerrit.useraliases." + r],
+                    stdout=subprocess.PIPE,
+                )
                 if p.returncode == 0:
-                    user = p.stdout.decode('utf-8').splitlines()[0].strip()
+                    user = p.stdout.decode("utf-8").splitlines()[0].strip()
 
-                gerrit_args.append('r=' + user)
+                gerrit_args.append("r=" + user)
     if args.topic:
-        gerrit_args.append('topic=' + args.topic)
+        gerrit_args.append("topic=" + args.topic)
     if args.code_review:
-        gerrit_args.append('label=Code-Review+2')
+        gerrit_args.append("label=Code-Review+2")
     if args.verified:
-        gerrit_args.append('label=Verified+1')
+        gerrit_args.append("label=Verified+1")
     for l in args.label:
-        gerrit_args.append(f'label={l[0]}{int(l[1]):+}')
+        gerrit_args.append(f"label={l[0]}{int(l[1]):+}")
     if args.wip:
-        gerrit_args.append('wip')
+        gerrit_args.append("wip")
     if args.private:
-        gerrit_args.append('private')
+        gerrit_args.append("private")
 
     if gerrit_args:
-        cmd[-1] += '%' + ','.join(gerrit_args)
+        cmd[-1] += "%" + ",".join(gerrit_args)
 
     if args.verbose:
-        print(' '.join(cmd))
+        print(" ".join(cmd))
     p = subprocess.run(cmd)
     sys.exit(p.returncode)
+
 
 if __name__ == "__main__":
     main()
