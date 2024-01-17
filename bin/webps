@@ -110,6 +110,13 @@ def main():
     parser.add_argument("server", help="Server IP/hostname")
     parser.add_argument("--user", help="Username")
     parser.add_argument("--password", help="Password")
+    parser.add_argument(
+        "--no-netrc",
+        "-n",
+        action="store_false",
+        dest="netrc",
+        help="Skip .netrc",
+    )
 
     subparsers = parser.add_subparsers(title="Command", description="Subcommand")
 
@@ -159,11 +166,14 @@ def main():
     with requests.Session() as session:
         if args.user or args.password:
             session.auth = requests.auth.HTTPDigestAuth(args.user, args.password)
-        else:
-            n = netrc.netrc()
-            auth = n.authenticators(args.server)
-            if auth is not None:
-                session.auth = requests.auth.HTTPDigestAuth(auth[0], auth[2])
+        elif args.netrc:
+            try:
+                n = netrc.netrc()
+                auth = n.authenticators(args.server)
+                if auth is not None:
+                    session.auth = requests.auth.HTTPDigestAuth(auth[0], auth[2])
+            except FileNotFoundError:
+                pass
 
         wps = WebPowerSwitch(args.server, session)
 
