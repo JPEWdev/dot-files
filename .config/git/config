@@ -87,6 +87,10 @@
     args = -s --to=meta-ti@lists.yoctoproject.org --subject-prefix=meta-ti]{branch}[{PATCH}
 [sendpatch "yocto-autobuilder-helper"]
     args = -s --to=yocto@lists.yoctoproject.org --subject-prefix=\"PATCH yocto-autobuilder-helper\"
+[sendpatch "meta-raspberrypi"]
+    args = -s --to=yocto@lists.yoctoproject.org --subject-prefix=meta-raspberrypi]{branch}[{PATCH}
+[sendpatch "meta-virt"]
+    args = -s --to meta-virtualization@lists.yoctoproject.org --subject-prefix='meta-virtualization]{branch}[{PATCH}'
 [mutt]
     startfolder = =patches/to-apply
 
