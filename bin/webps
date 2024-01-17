@@ -1,0 +1,174 @@
+#! /usr/bin/env python3
+
+import argparse
+import sys
+import requests
+import requests.auth
+import netrc
+
+
+def check_error(r):
+    r.raise_for_status()
+    if not r.text:
+        return
+
+    d = r.json()
+    for result in d:
+        if not isinstance(result, dict):
+            continue
+
+        if "error" in result:
+            raise Exception(result["error"])
+
+
+class WebPowerSwitch(object):
+    def __init__(self, server, session):
+        self.server = server
+        self.session = session
+        self.session.headers.update(
+            {
+                "X-CSRF": "x",
+                "Accept": "application/json",
+            }
+        )
+
+    def get_outlets(self):
+        url = f"http://{self.server}/restapi/relay/outlets/all;/"
+        r = self.session.get(url)
+        r.raise_for_status()
+        return r.json()
+
+    def get_outlet_indexes(self, params, allow_all=True):
+        outlets = self.get_outlets()
+        selected = set()
+        for p in params:
+            if p == "all" and allow_all:
+                return "all;"
+            try:
+                i_val = int(p)
+                selected.add(i_val)
+                continue
+            except ValueError:
+                pass
+
+            for idx, o in enumerate(outlets):
+                if o["name"] == p:
+                    selected.add(idx)
+                    break
+            else:
+                raise Exception(f"No outlet named '{p}' found")
+
+        return "=" + ",".join(str(i) for i in sorted(list(selected)))
+
+    def get_outlet_base_url(self, outlets, suffix, allow_all=True):
+        idx = self.get_outlet_indexes(outlets, allow_all=allow_all)
+        return f"http://{self.server}/restapi/relay/outlets/{idx}/{suffix}"
+
+    def set_outlets(self, outlets, value):
+        r = self.session.put(
+            self.get_outlet_base_url(outlets, "state/"),
+            data={"value": "true" if value else "false"},
+        )
+        check_error(r)
+
+    def cycle_outlets(self, outlets):
+        r = self.session.post(self.get_outlet_base_url(outlets, "cycle/"))
+        check_error(r)
+
+    def rename_outlet(self, outlet, name):
+        r = self.session.put(
+            self.get_outlet_base_url([outlet], "name/", allow_all=False),
+            data={"value": args.name},
+        )
+        check_error(r)
+
+
+def main():
+    def handle_show(args, wps):
+        for idx, outlet in enumerate(wps.get_outlets()):
+            print(f"Index: {idx}")
+            print(f"  Name:            {outlet['name']}")
+            print(f"  Requested State: {'on' if outlet['state'] else 'off'}")
+            print(f"  Physical State:  {'on' if outlet['physical_state'] else 'off'}")
+            print(f"  Transient State: {'on' if outlet['transient_state'] else 'off'}")
+            print(f"  Locked:          {'yes' if outlet['locked'] else 'no'}")
+            print(f"  Critical:        {'yes' if outlet['critical'] else 'no'}")
+
+    def handle_on(args, wps):
+        wps.set_outlets(args.outlets, True)
+
+    def handle_off(args, wps):
+        wps.set_outlets(args.outlets, False)
+
+    def handle_cycle(args, wps):
+        wps.cycle_outlets(args.outlets)
+
+    def handle_rename(args, wps):
+        wps.rename_outlet(args.outlet, args.name)
+
+    parser = argparse.ArgumentParser(description="Web Power Switch Control")
+    parser.add_argument("server", help="Server IP/hostname")
+    parser.add_argument("--user", help="Username")
+    parser.add_argument("--password", help="Password")
+
+    subparsers = parser.add_subparsers(title="Command", description="Subcommand")
+
+    show_parser = subparsers.add_parser("show", help="Show Relays")
+    show_parser.set_defaults(func=handle_show)
+
+    on_parser = subparsers.add_parser("on", help="Turn outlet(s) on")
+    on_parser.add_argument(
+        "--outlet",
+        "-o",
+        action="append",
+        default=[],
+        dest="outlets",
+        help="Outlet name, index, or 'all'",
+    )
+    on_parser.set_defaults(func=handle_on)
+
+    off_parser = subparsers.add_parser("off", help="Turn outlet(s) off")
+    off_parser.add_argument(
+        "--outlet",
+        "-o",
+        action="append",
+        default=[],
+        dest="outlets",
+        help="Outlet name, index, or 'all'",
+    )
+    off_parser.set_defaults(func=handle_off)
+
+    cycle_parser = subparsers.add_parser("cycle", help="Cycle outlet(s)")
+    cycle_parser.add_argument(
+        "--outlet",
+        "-o",
+        action="append",
+        default=[],
+        dest="outlets",
+        help="Outlet name, index, or 'all'",
+    )
+    cycle_parser.set_defaults(func=handle_cycle)
+
+    rename_parser = subparsers.add_parser("rename", help="Rename outlet")
+    rename_parser.add_argument("outlet", help="Outlet name or index")
+    rename_parser.add_argument("name", help="New name")
+    rename_parser.set_defaults(func=handle_rename)
+
+    args = parser.parse_args()
+
+    with requests.Session() as session:
+        if args.user or args.password:
+            session.auth = requests.auth.HTTPDigestAuth(args.user, args.password)
+        else:
+            n = netrc.netrc()
+            auth = n.authenticators(args.server)
+            if auth is not None:
+                session.auth = requests.auth.HTTPDigestAuth(auth[0], auth[2])
+
+        wps = WebPowerSwitch(args.server, session)
+
+        return args.func(args, wps)
+
+
+if __name__ == "__main__":
+    sys.exit(main())
