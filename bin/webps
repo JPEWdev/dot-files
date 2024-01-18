@@ -5,6 +5,8 @@ import sys
 import requests
 import requests.auth
 import netrc
+import yaml
+from pathlib import Path
 
 
 def check_error(r):
@@ -106,8 +108,32 @@ def main():
     def handle_rename(args, wps):
         wps.rename_outlet(args.outlet, args.name)
 
+    def set_auth(args, session, config):
+        username = None
+        password = None
+        if args.user or args.password:
+            username = args.user
+            password = args.password
+        elif (
+            config.get("servers", {}).get(server, {}).get("username", None) is not None
+        ):
+            username = config["servers"][server]["username"]
+            password = config["servers"][server].get("password")
+        elif args.netrc:
+            try:
+                n = netrc.netrc()
+                auth = n.authenticators(server)
+                if auth is not None:
+                    username = auth[0]
+                    password = auth[2]
+            except FileNotFoundError:
+                pass
+
+        if username is not None:
+            session.auth = requests.auth.HTTPDigestAuth(username, password)
+
     parser = argparse.ArgumentParser(description="Web Power Switch Control")
-    parser.add_argument("server", help="Server IP/hostname")
+    parser.add_argument("--server", help="Server IP/hostname")
     parser.add_argument("--user", help="Username")
     parser.add_argument("--password", help="Password")
     parser.add_argument(
@@ -118,7 +144,11 @@ def main():
         help="Skip .netrc",
     )
 
-    subparsers = parser.add_subparsers(title="Command", description="Subcommand")
+    subparsers = parser.add_subparsers(
+        title="Command",
+        description="Subcommand",
+        required=True,
+    )
 
     show_parser = subparsers.add_parser("show", help="Show Relays")
     show_parser.set_defaults(func=handle_show)
@@ -163,19 +193,27 @@ def main():
 
     args = parser.parse_args()
 
-    with requests.Session() as session:
-        if args.user or args.password:
-            session.auth = requests.auth.HTTPDigestAuth(args.user, args.password)
-        elif args.netrc:
-            try:
-                n = netrc.netrc()
-                auth = n.authenticators(args.server)
-                if auth is not None:
-                    session.auth = requests.auth.HTTPDigestAuth(auth[0], auth[2])
-            except FileNotFoundError:
-                pass
+    config = {}
+    try:
+        with (Path.home() / ".config" / "WebPowerSwitch" / "config.yaml").open(
+            "r"
+        ) as f:
+            config = yaml.load(f, Loader=yaml.SafeLoader)
+    except FileNotFoundError:
+        pass
 
-        wps = WebPowerSwitch(args.server, session)
+    if args.server:
+        server = args.server
+    elif "default-server" in config:
+        server = config["default-server"]
+    else:
+        print("A server must be specified")
+        return 1
+
+    with requests.Session() as session:
+        set_auth(args, session, config)
+
+        wps = WebPowerSwitch(server, session)
 
         return args.func(args, wps)
 
