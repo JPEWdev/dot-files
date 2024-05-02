@@ -94,6 +94,4 @@
 [sendpatch "meta-virt"]
     args = -s --to meta-virtualization@lists.yoctoproject.org --subject-prefix='meta-virtualization]{branch}[{PATCH}'
 [mutt]
-    startfolder = =patches/to-apply
-
-
+    startfolder = +patches/to-apply
