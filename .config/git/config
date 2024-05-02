@@ -12,6 +12,8 @@
 	smtpUser = JPEWhacker@gmail.com 
 	smtpServerPort = 587
 	confirm = always
+[format]
+    forceInBodyFrom = true
 [include]
 	path = ~/.gitconfig.local
 [diff]
