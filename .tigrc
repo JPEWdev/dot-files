@@ -6,4 +6,5 @@ bind main   C ?git cherry-pick %(commit)
 bind main   X ?git cherry-pick -x %(commit)
 bind main   T !@git tag -a "%(prompt Tag name: )" -m "%(prompt Tag message: )" %(commit)
 bind main   ^ :!git pushgerrit %(commit) -r "%(prompt Reviewers: )"
+bind main   p :!git format-patch -1 %(commit)
 
