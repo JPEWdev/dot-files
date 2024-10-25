@@ -30,7 +30,8 @@
 	cmd = meld "$LOCAL" "$BASE" "$REMOTE" --output "$MERGED" --diff "$BASE" "$LOCAL" --diff "$BASE" "$REMOTE" --auto-merge
 [core]
 	editor = vimx
-	hooksPath = ~/.config/git/hooks/
+[init]
+    templatedir = ~/.config/git/templates/
 [url "ssh://git@push.yoctoproject.org/poky-contrib"]
     pushInsteadOf = git://git.yoctoproject.org/poky-contrib
     pushInsteadOf = http://git.yoctoproject.org/poky-contrib

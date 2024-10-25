@@ -1,0 +1,5 @@
+#! /bin/sh
+
+if [ -x "$HOME/.config/git/scripts/hooks/$(basename $0)" ]; then
+    exec "$HOME/.config/git/scripts/hooks/$(basename $0)" "$@"
+fi
