@@ -3,3 +3,5 @@
 set -eu
 
 git clone git@github.com:JPEWdev/vim-config.git ~/.vim
+
+vim "+:PlugUpgrade" "+:PlugUpdate" "+qall"
