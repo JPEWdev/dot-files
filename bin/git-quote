@@ -1,2 +1,7 @@
 #! /bin/sh
-exec git log --format=quote -1 "$@"
+FORMAT=quote
+if [ "$1" = "--describe" ] || [ "$1" = "-d" ]; then
+    FORMAT=quote-describe
+    shift
+fi
+exec git log --format=$FORMAT -1 "$@"

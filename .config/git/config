@@ -54,6 +54,7 @@
     pushInsteadOf = https://git.openembedded.org/bitbake-contrib
 [pretty]
     quote = %h (\"%s\")
+    quote-describe = "%h (\"%s\"; %(describe))"
 [sendpatch "meta-mingw"]
     args = -s --to=yocto-patches@lists.yoctoproject.org --subject-prefix=yocto][meta-mingw]{branch}[{PATCH}
 [sendpatch "meta-gplv2"]
