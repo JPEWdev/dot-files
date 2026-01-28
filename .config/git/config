@@ -44,6 +44,14 @@
     pushInsteadOf = git://git.yoctoproject.org/meta-mingw
     pushInsteadOf = http://git.yoctoproject.org/meta-mingw
     pushInsteadOf = https://git.yoctoproject.org/meta-mingw
+[url "ssh://git@push.openembedded.org/openembedded-core-contrib"]
+    pushInsteadOf = git://git.openembedded.org/openembedded-core-contrib
+    pushInsteadOf = http://git.openembedded.org/openembedded-core-contrib
+    pushInsteadOf = https://git.openembedded.org/openembedded-core-contrib
+[url "ssh://git@push.openembedded.org/bitbake-contrib"]
+    pushInsteadOf = git://git.openembedded.org/bitbake-contrib
+    pushInsteadOf = http://git.openembedded.org/bitbake-contrib
+    pushInsteadOf = https://git.openembedded.org/bitbake-contrib
 [pretty]
     quote = %h (\"%s\")
 [sendpatch "meta-mingw"]
