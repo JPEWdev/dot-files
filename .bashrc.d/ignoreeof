@@ -1,0 +1,3 @@
+#! /bin/bash
+# Require 4 EOF signals (CTRL+D) before exiting to prevent accidental exits
+export IGNOREEOF=3
