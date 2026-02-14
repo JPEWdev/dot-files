@@ -1,3 +1,7 @@
 #! /bin/bash
-export FZF_DEFAULT_COMMAND='fdfind --type f --strip-cwd-prefix'
+if which fdfind > /dev/null 2>&1; then
+    export FZF_DEFAULT_COMMAND='fdfind --type f --strip-cwd-prefix'
+else
+    export FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix'
+fi
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
