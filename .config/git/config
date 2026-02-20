@@ -56,17 +56,17 @@
     quote = %h (\"%s\")
     quote-describe = "%h (\"%s\"; %(describe))"
 [sendpatch "meta-mingw"]
-    args = -s --to=yocto-patches@lists.yoctoproject.org --subject-prefix=yocto][meta-mingw]{branch}[{PATCH}
+    args = -s --to=yocto-patches@lists.yoctoproject.org --subject-prefix=yocto][meta-mingw][{branch}{PATCH}
 [sendpatch "meta-gplv2"]
-    args = -s --to=yocto-patches@lists.yoctoproject.org --subject-prefix=yocto][meta-gplv2]{branch}[{PATCH}
+    args = -s --to=yocto-patches@lists.yoctoproject.org --subject-prefix=yocto][meta-gplv2][{branch}{PATCH}
 [sendpatch "oe-core"]
-    args = -s --to=openembedded-core@lists.openembedded.org --subject-prefix=OE-core]{branch}[{PATCH}
+    args = -s --to=openembedded-core@lists.openembedded.org --subject-prefix=OE-core][{branch}{PATCH}
 [sendpatch "meta-poky"]
-    args = -s --to=poky@lists.yoctoproject.org --subject-prefix=poky][meta-poky]{branch}[{PATCH}
+    args = -s --to=poky@lists.yoctoproject.org --subject-prefix=poky][meta-poky][{branch}{PATCH}
 [sendpatch "meta-rockchip"]
-    args = -s --to=yocto-patches@lists.yoctoproject.org --cc=twoerner@gmail.com --subject-prefix=meta-rockchip]{branch}[{PATCH}
+    args = -s --to=yocto-patches@lists.yoctoproject.org --cc=twoerner@gmail.com --subject-prefix=meta-rockchip][{branch}{PATCH}
 [sendpatch "bitbake"]
-    args = -s --to=bitbake-devel@lists.openembedded.org --subject-prefix=bitbake-devel]{branch}[{PATCH}
+    args = -s --to=bitbake-devel@lists.openembedded.org --subject-prefix=bitbake-devel][{branch}{PATCH}
 [sendpatch "garmin-morty-poky"]
     args = --to='{{LS}}consumer-yocto@garmin.com' --smtp-auth=none --smtp-server=smtp.garmin.com --subject-prefix=yocto-2.2][poky][{PATCH} --cover-letter --annotate
 [sendpatch "git"]
@@ -78,30 +78,30 @@
 [sendpatch "kernel"]
     args = -s --cc-cmd='scripts/get_maintainer.pl --nol -i' --to-cmd='scripts/get_maintainer.pl --nom --nor -i'
 [sendpatch "meta-oe"]
-    args = --to openembedded-devel@lists.openembedded.org --subject-prefix=oe][meta-oe]{branch}[{PATCH}
+    args = --to openembedded-devel@lists.openembedded.org --subject-prefix=oe][meta-oe][{branch}{PATCH}
 [sendpatch "meta-webserver"]
-    args = --to openembedded-devel@lists.openembedded.org --subject-prefix=oe][meta-webserver]{branch}[{PATCH}
+    args = --to openembedded-devel@lists.openembedded.org --subject-prefix=oe][meta-webserver][{branch}{PATCH}
 [sendpatch "meta-oe"]
-    args = --to openembedded-devel@lists.openembedded.org --subject-prefix=oe][meta-oe]{branch}[{PATCH}
+    args = --to openembedded-devel@lists.openembedded.org --subject-prefix=oe][meta-oe][{branch}{PATCH}
 [sendpatch "meta-arm"]
-    args = -s --to=meta-arm@lists.yoctoproject.org --subject-prefix=meta-arm]{branch}[{PATCH}
+    args = -s --to=meta-arm@lists.yoctoproject.org --subject-prefix=meta-arm][{branch}{PATCH}
 [sendpatch "swupdate"]
     args = -s --to=swupdate@googlegroups.com
 [sendpatch "ptest-runner"]
-    args = -s --to=yocto-patches@lists.yoctoproject.org --subject-prefix=ptest-runner]{branch}[{PATCH}
+    args = -s --to=yocto-patches@lists.yoctoproject.org --subject-prefix=ptest-runner][{branch}{PATCH}
 [sendpatch "meta-swupdate"]
-    args = -s --to=swupdate@googlegroups.com --subject-prefix=meta-swupdate]{branch}[{PATCH}
+    args = -s --to=swupdate@googlegroups.com --subject-prefix=meta-swupdate][{branch}{PATCH}
 [sendpatch "yocto-docs"]
-    args = -s --to=docs@lists.yoctoproject.org --subject-prefix=docs]{branch}[{PATCH}
+    args = -s --to=docs@lists.yoctoproject.org --subject-prefix=docs][{branch}{PATCH}
 [sendpatch "pseudo"]
-    args = -s --to=openembedded-core@lists.openembedded.org --subject-prefix=pseudo]{branch}[{PATCH}
+    args = -s --to=openembedded-core@lists.openembedded.org --subject-prefix=pseudo][{branch}{PATCH}
 [sendpatch "meta-ti"]
-    args = -s --to=meta-ti@lists.yoctoproject.org --subject-prefix=meta-ti]{branch}[{PATCH}
+    args = -s --to=meta-ti@lists.yoctoproject.org --subject-prefix=meta-ti][{branch}{PATCH}
 [sendpatch "yocto-autobuilder-helper"]
     args = -s --to=yocto-patches@lists.yoctoproject.org --subject-prefix=\"PATCH yocto-autobuilder-helper\"
 [sendpatch "meta-raspberrypi"]
-    args = -s --to=yocto-patches@lists.yoctoproject.org --subject-prefix=meta-raspberrypi]{branch}[{PATCH}
+    args = -s --to=yocto-patches@lists.yoctoproject.org --subject-prefix=meta-raspberrypi][{branch}{PATCH}
 [sendpatch "meta-virt"]
-    args = -s --to meta-virtualization@lists.yoctoproject.org --subject-prefix='meta-virtualization]{branch}[{PATCH}'
+    args = -s --to meta-virtualization@lists.yoctoproject.org --subject-prefix='meta-virtualization][{branch}{PATCH}'
 [mutt]
     startfolder = +patches/to-apply

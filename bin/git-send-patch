@@ -34,7 +34,7 @@ def main():
     git_args = shlex.split(subprocess.check_output(['git', 'config', 'sendpatch.%s.args' % args.target]).decode('utf-8'))
 
     if args.branch:
-        branch_spec = '[%s]' % '/'.join(args.branch)
+        branch_spec = '%s][' % '/'.join(args.branch)
     else:
         branch_spec = ''
 
