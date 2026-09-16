@@ -1,0 +1,25 @@
+{
+  "renderMarkdown": true,
+  "theme": "auto",
+  "extraKnownMarketplaces": {
+    "i-have-adhd": {
+      "source": {
+        "source": "github",
+        "repo": "ayghri/i-have-adhd"
+      }
+    },
+    "ponytail": {
+      "source": {
+        "source": "github",
+        "repo": "DietrichGebert/ponytail"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "i-have-adhd@i-have-adhd": true,
+    "ponytail@ponytail": true
+  },
+  "footer": {
+    "showQuota": true
+  }
+}
