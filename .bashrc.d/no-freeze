@@ -1,2 +1,2 @@
 # I hate CTRL+S (Freeze terminal)
-stty -ixon
+[[ $- == *i* ]] && stty -ixon
